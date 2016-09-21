@@ -1,0 +1,73 @@
+<div class="container-fluid">
+<div class="panel-group" ng-repeat="x in intSummary">
+<br>
+<div ng-if="$scope.k==Success" class="panel panel-primary">
+      <div class="panel-heading">{{ x.serviceType }}:: {{ x.count }}</div>
+      <div class="panel-body">
+<table class="table table-bordered" ng-show="intSummary.length > 0"> 
+  <tr>
+  <th>CustomerName</th>
+  <th>SuccessCount</th>
+  <th>FailCount</th>   
+ </tr>
+  <tr ng-repeat="customer in x.byCustomer">   	
+    <td ng-if="$odd" style="background-color:#f1f1f1">{{  customer.name }}</td>
+    <td ng-if="$even">{{  customer.name }}</td> 
+    <td ng-if="$even" style="background-color:#f1f1f1">{{  customer.successCount }} <button type="button" class="btn btn-xs btn-default" data-toggle="modal" data-target="#myModal" ng-click="reqTransDetails('Success',x.serviceType,customer.name)"><i class="fa fa-external-link" aria-hidden="true"></i></button>
+	</td>
+    <td ng-if="$odd">{{  customer.successCount }} <button type="button" class="btn btn-xs btn-default" data-toggle="modal" data-target="#myModal" ng-click="reqTransDetails('Success',x.serviceType,customer.name)"><i class="fa fa-external-link" aria-hidden="true"></i></button>
+	</td>
+    <td ng-if="$even" style="background-color:#f1f1f1">{{  customer.failCount }} <button type="button" class="btn btn-xs btn-default" data-toggle="modal" data-target="#myModal" ng-click="reqTransDetails('Fail',x.serviceType,customer.name)"><i class="fa fa-external-link" aria-hidden="true"></i></button>
+	</td>
+    <td ng-if="$odd">{{  customer.failCount }} <button type="button" class="btn btn-xs btn-default" data-toggle="modal" data-target="#myModal" ng-click="reqTransDetails('Fail',x.serviceType,customer.name)"><i class="fa fa-external-link" aria-hidden="true"></i></button>
+	</td>	
+  </tr>   
+</table>
+</div>
+</div>
+</div>
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">InvoiceTransactions</h4>
+        </div>
+        <div class="modal-body">		
+		<input type="text" class="form-control" id="searchrecord" placeholder="search transaction">
+		  <br>
+          <table class="table table-bordered" ng-show="tranDtls.length > 0">
+           <thead style="background-color: lightgray;">		  
+            <tr>
+            <td></td>
+            <td>TranID</td>
+            <td>TimeStamp</td>
+             </tr>  
+            </thead>
+			<tbody>
+			 <tr ng-repeat-start="a in tranDtls">
+			 <td>
+              <button ng-if="a.expanded" ng-click="a.expanded = false"><i class="fa fa-caret-up" aria-hidden="true"></i></button>
+              <button ng-if="!a.expanded" ng-click="a.expanded = true"><i class="fa fa-caret-down" aria-hidden="true"></i></button>
+             </td>
+			 <td>{{ a.TransID }}</td>
+			 <td>{{ a.TimeStamp }}</td>			 
+			 </tr>
+			 <tr ng-if="a.expanded" ng-repeat-end="">
+               <td colspan="4" bgcolor="#00cc99">Transaction Received:{{a.TimeStamp}} <br> Failed: {{a.TimeStamp}} <br> Exception Message:{{a.StackTrace}} <br> Exception Code: {{a.ExceptionCode}}</td>
+            </tr>
+			</tbody>
+			</table>        
+		</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+</body>
+</html>

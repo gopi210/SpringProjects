@@ -1,0 +1,119 @@
+<style>
+	#myTabs{
+		border-bottom:0px;
+	}
+.clickable{
+    cursor: pointer;   
+}
+
+.panel-heading span {
+	margin-top: -20px;
+	font-size: 15px;
+}
+.row{
+    margin-top:40px;
+    padding: 0 10px;
+}
+.nav-tabs{
+background-color:#f2f2f2;
+ 
+}
+.nav-tabs > li > a{
+border-radius: 5px;
+}
+.nav-tabs > li > a:hover{
+background-color: #3D515F !important;
+border-radius: 5px;
+color:#fff;
+border:1px solid black;
+}
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:focus,
+.nav-tabs > li.active > a:hover{
+background-color: #68889E !important;
+color:#fff;
+border:2px solid #3F515F;
+}
+.overlay
+ {
+     position: absolute;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 0;
+     background-color: rgba(0, 0, 0, 0.85);
+     z-index: 9999;
+     color: white;
+     display: inline-block;
+ }
+ .gridStyle {
+    border: 1px solid rgb(212,212,212);
+    width: 400px; 
+    height: 300px
+}
+</style>
+
+<div class="container-fluid">
+ <div class="panel-group">
+  <div class="panel panel-primary" ng-init="disArcPath=false;disEnv=true;disSched=true;DeploymentForm.IsBW=false">
+    <div class="panel-heading">
+           <h3 class="panel-title">TIBCO App Deployment Form</h3>
+           <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+     </div>
+        <div class="panel-body" >          
+          <form class="form-inline" role="form" name="DeploymentForm">
+             <div class="row">
+             <div class="form-group form-group form-group-sm"> 
+             <div class="col-sm-6">
+             <input type="checkbox" name="APIXSel" ng-model="DeploymentForm.IsAPIX"> APIX
+             </div>
+             <div class="col-sm-6">
+             <input type="checkbox" name="BWSel" ng-model="DeploymentForm.IsBW"> TIBCO Services
+             </div>
+             </div>
+             </div>
+             <div class="row">           
+             <div class="form-group form-group form-group-sm" ng-if="DeploymentForm.IsBW">                                
+                <div class="col-sm-12">
+                   <label class="col-sm-3 control-label" for="Archive">EarsPath</label>
+                 <div class="col-sm-9">
+                   <input type="text" class="form-control" id="Archive" placeholder="Enter ArchivePath" ng-model="archivepath" ng-blur="GenArtifacts(archivepath)" ng-disabled="disArcPath" required>
+                   <span ng-show="DeploymentForm.archivepath.$touched && DeploymentForm.archivepath.$invalid">Archive Path is required.</span>
+                 </div>
+                </div>
+                   <br>                   
+                   <div class="col-sm-12">
+                     <label class="col-sm-3 control-label" for="Archive">Domain</label>
+                     <div class="col-sm-9">
+                     <select ng-model="selEnvName" ng-options="x.Value for x in Envnames" ng-change="EnvChange(selEnvName)" required>
+                     </select>
+                     <span ng-show="DeploymentForm.selEnvName.$touched && DeploymentForm.selEnvName.$invalid">Desired Env is mandatory.</span>
+                     </div>
+                  </div>                               
+                </div>
+             </div>                                           
+           </form>
+     </div>
+  </div>  
+ <div ng-init="isGvsUpdated=false" ng-show="ArchiveVariables.length > 0">
+ <br>
+ <ul class="nav nav-tabs" id="myTabs">
+ <li ng-repeat="ArchiveVariable in ArchiveVariables" ng-class="{'active':$index == '0'}"><a data-toggle="tab" href="#{{ ArchiveVariable.Name }}">{{ ArchiveVariable.Name }}</a></li>
+ </ul> 
+   <div id="my-tab-content" class="tab-content">
+     <div ng-repeat="GvsContent in ArchiveVariables" ng-class="{'tab-pane active':$index === 0, 'tab-pane' : $index !== 0}" id="{{ GvsContent.Name }}">
+     <br>              
+       <div class="alert alert-danger" ng-show="GvsContent.ValidationErrorMessage.length > 0">
+           <strong>Artifacts are not Generated, Validation Errors!</strong><pre>{{GvsContent.ValidationErrorMessage}}</pre>
+       </div>       
+       <textarea rows=20 cols=155 ng-model="GvsContent.GVs"></textarea>
+    </div>                      
+ </div>
+  <button id="SaveGVs" class="btn btn-primary btn-md">SAVE</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+ 

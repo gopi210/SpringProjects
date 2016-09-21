@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/jquery.treegrid.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.1/angular-ui-router.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-sanitize.min.js"></script>
+<script src="https://npmcdn.com/angular-toastr/dist/angular-toastr.tpls.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.0/angular-animate.js"></script>
+<link rel="stylesheet" href="https://npmcdn.com/angular-toastr/dist/angular-toastr.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/3.2.6/ui-grid.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/3.2.6/ui-grid.min.js"></script>
+<link rel="stylesheet" href="css/jquery.treegrid.css">
+<style>
+.row-TransactionType {
+width: 150%;
+}
+</style>
+</head>	
+<body ng-app="myApp">
+<nav class="navbar navbar-default" role="navigation">
+<div class="container">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+ </button>
+<a class="navbar-brand" href="#"><img style="max-width:48px; margin-top: -15px;max-height:48px;" src="NAPA_Logo_big.jpg"></a> 
+<a class="navbar-brand" href="#">ESB Portal</a>
+</div>
+<div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+              <li><a ui-sref="Logs&Exceptions">Logs&Exceptions</a></li>
+              <li><a ui-sref="EMSReport">EMSReport</a></li>
+              <li><a ui-sref="Replay">Replay</a></li>
+              <li><a ui-sref="Deployment">Deployment</a></li>             
+            </ul>
+</div>
+</div>
+</nav>
+<div class="container">
+<div ui-view="Maincontent"></div>
+</div>
+<script>
+var GenuinePartsesbPortal = GenuinePartsesbPortal || {};
+	   $('.tree').treegrid();
+GenuinePartsesbPortal.myApp = angular.module("myApp", ["ui.router","ngSanitize","ngAnimate", "toastr",
+"ui.grid",                  //data grid for AngularJS
+"ui.grid.pagination",       //data grid Pagination
+"ui.grid.resizeColumns",    //data grid Resize column
+"ui.grid.moveColumns",      //data grid Move column
+"ui.grid.pinning",          //data grid Pin column Left/Right
+"ui.grid.selection",        //data grid Select Rows
+"ui.grid.autoResize",       //data grid Enabled auto column Size
+"ui.grid.exporter"])
+.config(['$stateProvider', '$urlRouterProvider',
+         function($stateProvider,$urlRouterProvider){
+	       
+           $stateProvider
+           .state("Logs&Exceptions",{
+           url:"/LogsExceptions",
+           views : {
+				'Maincontent' : {
+					templateUrl : "LogsExceptions.html",
+					controller : "LogExceptionController"
+						}
+					}
+		   
+        })
+		.state("Replay",{
+           url:"/ReplayReq",
+           views : {
+				'Maincontent' : {
+		   controller:"ReplayController",
+		   templateUrl:"Replay.html",
+		   }
+		   }
+        })
+		 .state("Deployment",{
+           url:"/DeploymentReq",
+           views : {
+				'Maincontent' : {
+		   templateUrl:"DeploymentAccelerator.html",
+		   controller:"DeployController"
+		   }
+		   }
+        });
+        }
+       ])
+      
+</script>
+<!--<script type="text/javascript" src="./js/InterfaceReportController.js"></script>-->
+<script type="text/javascript" src="./js/LogsExceptions.js"></script>
+<script type="text/javascript" src="./js/Services.js"></script>
+<script type="text/javascript" src="./js/DeploymentController.js"></script>
+<script type="text/javascript" src="./js/ReplayController.js"></script>
+</body>
+</html>

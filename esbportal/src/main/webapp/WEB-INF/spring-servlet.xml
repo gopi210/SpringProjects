@@ -1,0 +1,38 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <mvc:default-servlet-handler/>
+    <mvc:annotation-driven />
+	<context:component-scan base-package="com.apg.esbportal" />	
+	<bean id="JMSMessageSender" class="com.apg.esbportal.JMSMessageSender"></bean>	
+	<context:property-placeholder
+		location="WEB-INF/esbportal.properties" />
+	<!-- JMS Config -->
+
+	<bean id="tibemsConnectionFactory"
+		class="org.springframework.jms.connection.CachingConnectionFactory">
+		<property name="targetConnectionFactory">
+			<bean class="com.tibco.tibjms.TibjmsQueueConnectionFactory">
+				<property name="serverUrl" value="${esbportal.JMSURL}" />
+				<property name="userName" value="${esbportal.JMSUSER}" />
+				<property name="userPassword" value="${esbportal.JMSPASSWORD}" />
+			</bean>
+		</property>		
+		<property name="sessionCacheSize" value="100" />
+	</bean>
+
+
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg ref="tibemsConnectionFactory" />
+		<property name="receiveTimeout" value="180000" />
+	</bean>
+
+
+	<bean id="jmsmessagetemplate" class="org.springframework.jms.core.JmsMessagingTemplate">
+		<constructor-arg ref="jmsTemplate" />
+	</bean>
+			
+</beans>
