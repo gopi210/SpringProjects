@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;ldapauth/src/main/webapp/WEB-INF/esbportal.properties&apos; to &apos;ldapauth.properties&apos;" description="Rename resource &apos;esbportal.properties&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/webapp/WEB-INF/esbportal.properties" name="ldapauth.properties" stamp="1476312714334" updateReferences="true"/>
-</session>
