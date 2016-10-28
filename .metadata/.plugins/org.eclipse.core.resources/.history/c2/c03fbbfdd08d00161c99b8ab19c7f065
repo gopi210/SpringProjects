@@ -1,0 +1,158 @@
+<style>
+	#myTabs{
+		border-bottom:0px;
+	}
+.clickable-properties{
+    cursor: pointer;   
+}
+.clickable{
+    cursor: pointer;   
+}
+.panel-heading span {
+	margin-top: -20px;
+	font-size: 15px;
+}
+.row{
+    margin-top:0px;
+    padding: 0 10px;
+}
+.top-buffer { 
+margin-top:5px; 
+}
+
+.nav-tabs{
+background-color:#f2f2f2;
+ 
+}
+.nav-tabs > li > a{
+border-radius: 5px;
+}
+.nav-tabs > li > a:hover{
+background-color: #3D515F !important;
+border-radius: 5px;
+color:#fff;
+border:1px solid black;
+}
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:focus,
+.nav-tabs > li.active > a:hover{
+background-color: #68889E !important;
+color:#fff;
+border:2px solid #3F515F;
+}
+.overlay
+ {
+     position: absolute;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 0;
+     background-color: rgba(0, 0, 0, 0.85);
+     z-index: 9999;
+     color: white;
+     display: inline-block;
+ }
+ .gridStyle {
+    border: 1px solid rgb(212,212,212);
+    width: 400px; 
+    height: 300px
+}
+</style>
+
+<div class="container-fluid">
+ <div class="panel-group id="accordion">
+  <div class="panel panel-default" ng-init="disArcPath=false;disEnv=true;disSched=true;DeploymentForm.IsBW=false">
+    <div class="panel-heading">
+           <h3 class="panel-title">TIBCO-BW Deployment Form</h3>
+           <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+     </div>
+			<div class="panel-body">
+				<ng-form name="DeploymentForm">
+				<div class="row form-group">
+					<div class="col-md-12">
+						<div class="col-md-3">
+							<label class="control-label" for="Archive">EarsPath</label>
+						</div>
+						<div class="col-md-4">
+							<input type="text" name="EarPath" class="form-control"
+								id="Archive" placeholder="Enter ArchivePath"
+								ng-model="archivepath" ng-blur="GenArtifacts(archivepath)"
+								ng-disabled="disArcPath" required>
+						</div>
+					</div>
+					<div class="col-md-12 top-buffer">
+						<div class="col-md-3">
+							<label class="control-label" for="Archive">Domain</label>
+						</div>
+						<div class="col-md-4">
+							<select name="selEnvName" ng-model="selEnvName"
+								ng-options="x.Value for x in Envnames"
+								ng-change="EnvChange(selEnvName)" class="form-control" required></select>
+						</div>
+					</div>
+				</div>
+				</ng-form>
+				<div>
+					<p ng-show="DeploymentForm.EarPath.$error.required">Ear Path is required.</p>
+					<p ng-show="DeploymentForm.selEnvName.$error.required">Select Domain.</p>
+				</div>
+			</div>
+		</div>
+  </div>
+ <div ng-init="isGvsUpdated=false" ng-show="ArchiveVariables.length > 0">
+ <span class="btn-group pull-right"><button id="SaveAppProps" class="btn btn-default btn-sm" onclick="SaveProps('AppProps')">SAVE</button></span>
+ <br>
+ <br>
+ <div class="panel panel-primary">
+ <div class="panel-heading">
+           <h3 class="panel-title">Application Properties</h3>
+           <span class="pull-right clickable-properties"><i class="glyphicon glyphicon-chevron-up"></i></span>
+ </div>
+ <div class="panel-body"> 
+ <ul class="nav nav-tabs" id="myTabs">
+ <li ng-repeat="ArchiveVariable in ArchiveVariables" ng-class="{'active':$index == '0'}"><a data-toggle="tab" href="#{{ ArchiveVariable.Name }}">{{ ArchiveVariable.Name }}</a></li>
+ </ul> 
+   <div id="my-tab-content" class="tab-content">
+     <div ng-repeat="GvsContent in ArchiveVariables" ng-class="{'tab-pane active':$index === 0, 'tab-pane' : $index !== 0}" id="{{ GvsContent.Name }}">
+     <br>              
+       <div class="alert alert-danger" ng-show="GvsContent.ValidationErrorMessage.length > 0">
+           <strong>Artifacts are not Generated, Validation Errors!</strong><pre>{{GvsContent.ValidationErrorMessage}}</pre>
+       </div>       
+       <textarea rows=20 cols=150 ng-model="GvsContent.GVs"></textarea>
+    </div>                      
+ </div>
+ </div>
+</div>
+</div>
+ <div ng-init="isFinalizeProps=false" ng-show="ArchiveVariables.length > 0">
+ <span class="btn-group pull-right"><button id="SaveAppProps" class="btn btn-default btn-sm" onclick="SaveProps('AppProps')">SAVE</button></span>
+ <br>
+ <br>
+ <div class="panel panel-primary">
+ <div class="panel-heading">
+           <h3 class="panel-title">Application Properties</h3>
+           <span class="pull-right clickable-properties"><i class="glyphicon glyphicon-chevron-up"></i></span>
+ </div>
+ <div class="panel-body"> 
+ <ul class="nav nav-tabs" id="myTabs">
+ <li ng-repeat="ArchiveVariable in ArchiveVariables" ng-class="{'active':$index == '0'}"><a data-toggle="tab" href="#{{ ArchiveVariable.Name }}">{{ ArchiveVariable.Name }}</a></li>
+ </ul> 
+   <div id="my-tab-content" class="tab-content">
+     <div ng-repeat="GvsContent in ArchiveVariables" ng-class="{'tab-pane active':$index === 0, 'tab-pane' : $index !== 0}" id="{{ GvsContent.Name }}">
+     <br>              
+       <div class="alert alert-danger" ng-show="GvsContent.ValidationErrorMessage.length > 0">
+           <strong>Artifacts are not Generated, Validation Errors!</strong><pre>{{GvsContent.ValidationErrorMessage}}</pre>
+       </div>       
+       <textarea rows=20 cols=150 ng-model="GvsContent.GVs"></textarea>
+    </div>                      
+ </div>
+ </div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+ 

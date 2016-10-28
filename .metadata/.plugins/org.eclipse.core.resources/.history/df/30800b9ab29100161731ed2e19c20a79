@@ -1,0 +1,4 @@
+ldap.server=ldap.forumsys.com
+ldap.port=389
+ldap.manager.user=uid=riemann,dc=example,dc=com
+ldap.manager.password=password

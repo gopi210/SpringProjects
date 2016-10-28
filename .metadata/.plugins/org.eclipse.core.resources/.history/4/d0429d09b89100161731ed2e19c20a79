@@ -1,0 +1,63 @@
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+	
+	<context:property-placeholder
+		location="WEB-INF/ldapauth.properties" />
+	<!-- Begin Web Security -->
+	<!-- unsecured resource if needed -->
+	<!--  <sec:http pattern="/images/**" security="none"/> -->
+	<sec:http>
+	    <!-- configure the roles allowed to access the app -->
+	    <sec:intercept-url pattern="/**" access="hasAnyRole('MANAGER', 'USER')"/>
+	    <!-- add more urls/patters/roles to refine security -->
+	    
+	    <sec:form-login/>
+	    <sec:logout/>
+	    <!-- if you are adding to an exiting app, 
+				you may need to disable CSRF protection until you can make application changes. -->
+	    <!-- sec:csrf disabled="true"/ -->
+	</sec:http>
+ 
+	<!-- add the properties below to your app's properties file 
+			or replace with hardcoded values to get working -->
+	<!--  <sec:ldap-server 
+		id="contextSource" 
+		url="ldap://${ldap.server}:${ldap.port}/dc=example,dc=com"
+		userDn="${ldap.manager.user}"
+		manager-password="${ldap.manager.password}"/>-->
+		
+		<bean id="contextSource"
+        class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+        <constructor-arg value="ldap://ldap.forumsys.com:389/dc=example,dc=com"/>
+        <property name="userDn" value="cn=read-only-admin,dc=example,dc=com"/>
+        <property name="password" value="password"/>
+        </bean>
+		 
+	<bean id="ldapAuthProvider"
+    class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
+ <constructor-arg>
+   <bean class="org.springframework.security.ldap.authentication.BindAuthenticator">
+     <constructor-arg ref="contextSource"/>
+     <property name="userDnPatterns">
+       <list><value>uid={0},ou=mathematicians</value></list>
+     </property>
+   </bean>
+ </constructor-arg>
+ <constructor-arg>
+   <bean
+     class="org.springframework.security.ldap.userdetails.DefaultLdapAuthoritiesPopulator">
+     <constructor-arg ref="contextSource"/>
+     <constructor-arg value="ou=groups"/>
+     <property name="groupRoleAttribute" value="ou"/>
+   </bean>
+ </constructor-arg>
+</bean>
+	<!--  end Web Security -->
+</beans>
