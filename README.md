@@ -1,2 +1,2 @@
 # SpringProjects
-# downloaded from GIT
+# downloaded from GIT 08/26
